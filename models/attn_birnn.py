@@ -10,15 +10,25 @@ class AttentionalBiRNN(nn.Module):
         self.gru = nn.GRU(input_size=input_dim, hidden_size=(hidden_dim//2),
                           bidirectional=True, batch_first=True)
         self.W = nn.Linear(hidden_dim, attn_dim)
-        self.V = nn.Parameter(torch.randn(hidden_dim).float())
+        self.V = nn.Parameter(torch.randn(attn_dim).float())
+        self.softmax = nn.Softmax(dim=-1)
         # Init GRU's weight
         init_lstm_(self.gru, init_weight)
 
     def forward(self, inputs, lengths):
-        packed_batch = nn.utils.rnn.pack_padded_sequence(inputs, lengths=lengths.tolist(), batch_first=True)
+        packed_batch = nn.utils.rnn.pack_padded_sequence(inputs, lengths=lengths.cpu().tolist(), batch_first=True)
         last_outputs, _ = self.gru(packed_batch)
-        enc_sents, len_s = torch.nn.utils.rnn.pad_packed_sequence(last_outputs)
+        enc_sents, len_s = torch.nn.utils.rnn.pad_packed_sequence(last_outputs, batch_first=True)
 
-        alpha = torch.tanh(self.W(enc_sents))
-        context = self.V(alpha)
-        all_att = self._masked_softmax(context, self._list_to_bytemask(list(len_s))).transpose(0, 1)
+        Hw = torch.tanh(self.W(enc_sents))
+        w_score = self.softmax(Hw.matmul(self.V))
+        enc_sents = enc_sents.mul(w_score.unsqueeze(-1))
+        enc_sents = torch.sum(enc_sents, dim=1)
+        return enc_sents
+
+
+if __name__ == "__main__":
+    input_sample = torch.rand((2, 4, 300))
+    length_sample = torch.tensor([4, 2])
+    attn = AttentionalBiRNN(300, 512, 1024, 0.1)
+    attn(input_sample, length_sample)
