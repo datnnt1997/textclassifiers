@@ -1,15 +1,20 @@
 import re
 import string
+import gensim
 
 from os import path
 from underthesea import sent_tokenize, word_tokenize
+from sklearn.model_selection import train_test_split
+
+from tqdm import tqdm
 
 URL_PATTERN = ".[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2," \
             "}|www\.[a-zA-Z0-9]+\.[^\s]{2,} "
 
 NUMBER_PATTERN = "([0-9]+[.,\)/:]?([0-9]+)?[.,\/):]?)"
-DATASET = "dataset/Dataset_GopY.tsv"
-OUT = "dataset/output.tsv"
+DATASET = "dataset/Dataset_gopy.tsv"
+# OUT = "dataset/preprocess_dataset.tsv"
+OUT = "dataset/"
 
 example_content = """Trước tiên tôi xin cảm ơn cơ quan chức năng đã làm việc và phản hồi về vấn đề đỗ xe lấn chiếm lòng đường tại K96 H17/11 Hải Hồ (https://gopy.danang.gov.vn/gop-y?pageid=view&ykien=23557)
 Trong bài phản ánh trước đã được phản hồi là Công an phường làm việc với các hộ dân trong tổ 27 và 28 để tránh đỗ xe ở lòng đường kiệt gây cản trở giao thông. Tuy nhiên không hiểu sao gia đình bà Lan vẫn tiếp tục tái diễn việc đỗ xe tại nơi ngã ba này cả ngày lẫn đêm, gây khó khăn cho việc đi lại của người dân trong khu phố. Theo như phản hồi từ Công an phường thì do đường kiệt không có bảng cấm đỗ nên không có cơ sở để xử lý, nhưng theo Khoản 4 Điều 18 Luật giao thông đường bộ quy định về Dừng xe, đỗ xe trên đường bộ:
@@ -73,12 +78,12 @@ def statistic(dataset_path: path):
 
 def text_normalize(text):
     text = text.strip()
-    #norm_word_tokenize = " ".join(word_tokenize(text))
+    #norm_word_tokenize = word_tokenize(text, format='text')
     norm_url = re.sub(URL_PATTERN, " URL ", text)
-    norm_number = re.sub(NUMBER_PATTERN, " NUM ", norm_url)
-    norm_punc = re.sub(f"[{string.punctuation}]", " ", norm_number)
-    norm_newline = re.sub("\n+| +", " ", norm_punc)
-    return norm_newline
+    #norm_number = re.sub(NUMBER_PATTERN, " NUM ", norm_url)
+    #norm_punc = re.sub(f"[{string.punctuation}]", " ", norm_number)
+    #norm_newline = re.sub("\n+| +", " ", norm_url)
+    return norm_url
 
 
 def preprocess(dataset_path, out_path):
@@ -86,14 +91,48 @@ def preprocess(dataset_path, out_path):
     with open(dataset_path, "r", encoding="utf-8") as reader, \
             open(out_path, "w", encoding="utf-8") as writer:
         examples = reader.readlines()
-        for example in examples[1:]:
-            title, content, default, category, provinces = example.split("\t")
-            writer.write(f"{text_normalize(content)}\t{default}\t{category}\t{provinces}")
+        for example in tqdm(examples[1:]):
+            title, content, default, category, provinces, _ = example.split("\t")
+            writer.write(f"{text_normalize(content)}\t{category}\n")
         writer.close()
         reader.close()
 
 
+def preprocess_split_data(dataset_path, out_path):
+    assert path.exists(dataset_path), f"{dataset_path} is not exists!"
+    with open(dataset_path, "r", encoding="utf-8") as reader, \
+            open(out_path+"/train.tsv", "w", encoding="utf-8") as train_writer, \
+            open(out_path+"/test.tsv", "w", encoding="utf-8") as test_writer:
+        examples = reader.readlines()
+        data = []
+        for example in tqdm(examples[1:]):
+            title, content, default, category, provinces, _ = example.split("\t")
+            data.append(f"{text_normalize(content)}\t{category}\n")
+        train_examples, test_examples = train_test_split(data, test_size=0.2, random_state=42, shuffle=True)
+        for example in train_examples:
+            train_writer.write(example)
+        for example in test_examples:
+            test_writer.write(example)
+        train_writer.close()
+        test_writer.close()
+        reader.close()
+
+
+def build_word2vec():
+    from gensim.models import KeyedVectors
+    wv = KeyedVectors.load_word2vec_format("baomoi.vn.model.bin", binary=True)
+    wv.save_word2vec_format("embeding.emb")
+    print()
+
+def load_vectors():
+    from torchtext.vocab import Vectors
+    vectors = Vectors(name="embeding.emb", cache="/")
+    print()
+
 if __name__ == "__main__":
     # statistic(OUT)
-    preprocess(DATASET, OUT)
+    preprocess_split_data(DATASET, OUT)
+    #build_word2vec()
+    # load_vectors()
+    #preprocess_split_data(DATASET, OUT)
     # print(text_normalize(example_content))
