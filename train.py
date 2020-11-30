@@ -25,16 +25,19 @@ def save_checkpoint(save_dir, model, epoch, loss, acc, macro_f1):
     print("saved model at epoch %d" % epoch)
 
 
-def eval(test_iter, model):
+def eval(test_iter, model, device):
     avg_loss = 0
     predicts = []
     actuals = []
     model.eval()
     tqdm_bar = tqdm(enumerate(test_iter), total=len(test_iter), desc="Valid")
     for idx, batch in tqdm_bar:
-        sent, sent_lens = batch.text
-        labels = batch.label
-        loss, probs = model(sent, sent_lens)
+        sent, sent_lens, labels = batch
+        if device == 'cuda':
+            sent = sent.cuda()
+            sent_lens = sent_lens.cuda()
+            labels = labels.cuda()
+        loss, probs = model(sent, sent_lens, labels)
 
         avg_loss += loss.item()
         predicts += [y.argmax().item() for y in probs]
@@ -45,9 +48,6 @@ def eval(test_iter, model):
     acc_score = metrics.accuracy_score(actuals, predicts)
     macro_f1_score = metrics.f1_score(actuals, predicts, average="macro")
     print(metric)
-    print("Confusion Matrix:")
-    print("")
-    print(conf_matrix)
     print("VALID Macro F1 score: " + str(macro_f1_score))
     print("VALID Accurancy score: " + str(acc_score))
     print("VALID LOSS: {}".format(avg_loss / len(test_iter)))
@@ -59,10 +59,11 @@ def main():
 
     if not os.path.exists(opts.saved_dir):
         os.makedirs(opts.saved_dir)
-
+    print("Loading TRAIN dataset ...")
     train_dataset = TextDataset(opts.train_path, data_format=['text', 'label'],
                                 delimiter='\t', vocab=None, label_set=None, max_len=256,
                                 pad_token="<pad>", unk_token="<unk>")
+    print("Loading TEST dataset ...")
 
     test_dataset = TextDataset(opts.test_path, data_format=['text', 'label'],
                                delimiter='\t', vocab=train_dataset.vocab, label_set=train_dataset.label_set,
@@ -110,9 +111,13 @@ def main():
         tqdm_bar = tqdm(enumerate(train_iter), total=len(train_iter), desc="Train")
         for idx, batch in tqdm_bar:
             optimizer.zero_grad()
-            sent, sent_lens = batch.text
-            labels = batch.label
-            loss, probs = model(sent, sent_lens)
+
+            sent, sent_lens, labels = batch
+            if opts.device == 'cuda':
+                sent = sent.cuda()
+                sent_lens = sent_lens.cuda()
+                labels = labels.cuda()
+            loss, probs = model(sent, sent_lens, labels)
             loss.backward()
             optimizer.step()
 
@@ -127,8 +132,7 @@ def main():
         print("TRAIN LOSS: {}".format(epoch_avg_loss / len(train_iter)))
 
         if epoch % opts.valid_interval == 0:
-            acc_score, macro_f1_score, avg_loss = eval(valid_iter, model)
-
+            acc_score, macro_f1_score, avg_loss = eval(valid_iter, model, opts.device)
             if macro_f1_score > best_score:
                 save_checkpoint(opts.saved_dir, model, epoch, avg_loss,  acc_score, macro_f1_score)
                 best_score = macro_f1_score

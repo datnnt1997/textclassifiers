@@ -1,7 +1,7 @@
 import torch
 
 from torch.utils.data import Dataset, DataLoader
-
+from tqdm import tqdm
 
 def read_data(file_path, delimiter='\t'):
     datasets = []
@@ -87,7 +87,7 @@ class TextDataset(Dataset):
         pad_id = self.vocab.index(self.pad_token)
         text_id = self.data_format.index('text')
         label_id = self.data_format.index('label')
-        for cols in dataset:
+        for cols in tqdm(dataset):
             raw_text = cols[text_id].strip()
             raw_label = cols[label_id].strip()
 
