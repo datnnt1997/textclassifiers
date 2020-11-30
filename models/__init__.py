@@ -1,3 +1,3 @@
-from .rnn import RNNNet
+from .fasttext import FastText
 
-__all__ = ['RNNNet']
+__all__ = ['FastText']
