@@ -18,6 +18,6 @@ class FastText(nn.Module):
         if label_ids is None:
             return None, probs
         else:
-            loss_fct = nn.NLLLoss()
+            loss_fct = nn.CrossEntropyLoss()
             loss = loss_fct(logits, label_ids)
             return loss, probs

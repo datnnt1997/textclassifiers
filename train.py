@@ -19,6 +19,7 @@ def save_checkpoint(save_dir, model, epoch, loss, acc, macro_f1):
     f.write("Epoch: {}\n".format(epoch))
     f.write("Loss: {}\n".format(loss))
     f.write("Evaluation: \n")
+    f.write("Accuracy: {}\n".format(acc))
     f.write("F1 score: {}\n".format(macro_f1))
     f.write("=" * 30 + "CLASS METRIC" + "=" * 30)
     f.close()
@@ -33,18 +34,18 @@ def eval(test_iter, model, device):
     tqdm_bar = tqdm(enumerate(test_iter), total=len(test_iter), desc="Valid")
     for idx, batch in tqdm_bar:
         sent, sent_lens, labels = batch
+        input_ids, seq_lens, label_ids = batch
         if device == 'cuda':
-            sent = sent.cuda()
-            sent_lens = sent_lens.cuda()
-            labels = labels.cuda()
-        loss, probs = model(sent, sent_lens, labels)
+            input_ids = input_ids.to(device)
+            seq_lens = seq_lens.to(device)
+            label_ids = label_ids.to(device)
+        loss, probs = model(input_ids, seq_lens, label_ids)
 
         avg_loss += loss.item()
         predicts += [y.argmax().item() for y in probs]
         actuals += labels.tolist()
 
     metric = metrics.classification_report(actuals, predicts)
-    conf_matrix = metrics.confusion_matrix(actuals, predicts)
     acc_score = metrics.accuracy_score(actuals, predicts)
     macro_f1_score = metrics.f1_score(actuals, predicts, average="macro")
     print(metric)
@@ -108,23 +109,24 @@ def main():
         predicts = []
         actuals = []
         model.train()
+        model.to(opts.device)
         tqdm_bar = tqdm(enumerate(train_iter), total=len(train_iter), desc="Train")
         for idx, batch in tqdm_bar:
             optimizer.zero_grad()
 
-            sent, sent_lens, labels = batch
+            input_ids, seq_lens, label_ids = batch
             if opts.device == 'cuda':
-                sent = sent.cuda()
-                sent_lens = sent_lens.cuda()
-                labels = labels.cuda()
-            loss, probs = model(sent, sent_lens, labels)
+                input_ids = input_ids.to(opts.device)
+                seq_lens = seq_lens.to(opts.device)
+                label_ids = label_ids.to(opts.device)
+            loss, probs = model(input_ids, seq_lens, label_ids)
             loss.backward()
             optimizer.step()
 
             epoch_avg_loss += loss.item()
             predicts += [y.argmax().item() for y in probs]
-            actuals += labels.tolist()
-
+            actuals += label_ids.tolist()
+        print(epoch_avg_loss)
         acc_score = metrics.accuracy_score(actuals, predicts)
         macro_f1_score = metrics.f1_score(actuals, predicts, average="macro")
         print("TRAIN Macro F1 score: " + str(macro_f1_score))
