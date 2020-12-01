@@ -4,7 +4,7 @@ import torch.nn as nn
 class FastText(nn.Module):
     def __init__(self, vocab_size, embed_dim, hidden_dim, num_labels, vectors=None, pad_idx=0):
         super(FastText, self).__init__()
-        self.embed_layer = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        self.embed_layer = nn.Embedding(vocab_size, embed_dim, padding_idx=pad_idx)
         self.fc1_layer = nn.Linear(embed_dim, hidden_dim)
         self.fc2_layer = nn.Linear(hidden_dim, num_labels)
         self.softmax = nn.LogSoftmax(dim=-1)

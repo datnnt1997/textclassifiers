@@ -3,7 +3,7 @@ import os
 from torch.utils.data import DataLoader
 from config import *
 from datahelper import TextDataset
-from models import FastText
+from models import FastText, TextRNN
 from sklearn import metrics
 from tqdm import tqdm
 
@@ -56,7 +56,8 @@ def eval(test_iter, model, device):
 
 
 def main():
-    opts = Config()
+    # opts = Config()
+    opts = TextRNNConfig()
 
     if not os.path.exists(opts.saved_dir):
         os.makedirs(opts.saved_dir)
@@ -70,13 +71,17 @@ def main():
                                delimiter='\t', vocab=train_dataset.vocab, label_set=train_dataset.label_set,
                                max_len=256, pad_token="<pad>", unk_token="<unk>")
 
-    model = FastText(vocab_size=len(train_dataset.vocab),
-                     embed_dim=opts.embed_dim,
-                     hidden_dim=opts.hidden_dim,
-                     num_labels=len(train_dataset.label_set),
-                     vectors=None,
-                     pad_idx=train_dataset.pad_id)
+    # model = FastText(vocab_size=len(train_dataset.vocab),
+    #                  embed_dim=opts.embed_dim,
+    #                  hidden_dim=opts.hidden_dim,
+    #                  num_labels=len(train_dataset.label_set),
+    #                  vectors=None,
+    #                  pad_idx=train_dataset.pad_id)
 
+    model = TextRNN(vocab_size=len(train_dataset.vocab), embed_dim=opts.embed_dim, hidden_dim=opts.hidden_dim,
+                    bidirectional=True,
+                    num_labels=len(train_dataset.label_set), num_rnn_layers=opts.num_rnn_layers,
+                    vectors=None, pad_idx=train_dataset.pad_id, dropout_prob=opts.dropout_prob)
     if opts.pretrained_model_dir is not None:
         model_checkpoint = torch.load(opts.pretrained_model_dir + "/model.model")
         model.load_state_dict(model_checkpoint)
