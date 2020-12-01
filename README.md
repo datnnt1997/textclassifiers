@@ -7,7 +7,7 @@ Install dependencies:
 
 ## Run the code
 ### Train
-`python3 train.py
+`python3 train.py`
 
 ### Query Well formedness result
 | Models              |       Score             ||
