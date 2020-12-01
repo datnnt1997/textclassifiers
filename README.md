@@ -10,7 +10,7 @@ Install dependencies:
 `python3 train.py
 
 ### Query Well formedness result
-| Models              |       Score             |
+| Models              |       Score             ||
 |---------------------|------------|------------|
 |                     | Accuracy   | F1 Score   | 
 | FastText            |  61,38%    |  61,32%    | 
