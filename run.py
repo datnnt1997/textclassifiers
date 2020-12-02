@@ -8,7 +8,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not os.path.exists(args.config):
-        raise ValueError(
-            "Config file ({}) not exists or is empty !!!".format(args.config))
+        raise ValueError("Config file ({}) not exists or is empty !!!".format(args.config))
     train(args.config)
 

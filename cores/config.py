@@ -45,12 +45,25 @@ class TextRNNConfig(Config):
         self.num_rnn_layers = 2
         self.dropout_prob = 0.8
         self.bidirectional = True
+
         self.model_type = 'textrnn'
+
+
+class TextCNNConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self.num_filter = 100
+        self.filter_sizes = [3, 4, 5]
+        self.dropout_prob = 0.2
+        self.multi_channel = True
+
+        self.model_type = 'textcnn'
 
 
 CONFIG_MAP = {
     'fasttext': FastTextConfig,
-    'textrnn': TextRNNConfig
+    'textrnn': TextRNNConfig,
+    'textcnn': TextCNNConfig
 }
 
 if __name__ == '__main__':

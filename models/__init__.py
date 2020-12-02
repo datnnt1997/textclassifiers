@@ -3,11 +3,13 @@ import torch
 
 from .fasttext import FastText
 from .textrnn import TextRNN
+from .textcnn import TextCNN
 from cores.logger import logger
 
 MODEL_MAP = {
     'fasttext': FastText,
-    'textrnn': TextRNN
+    'textrnn': TextRNN,
+    'textcnn': TextCNN
 }
 
 
