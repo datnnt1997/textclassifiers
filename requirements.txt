@@ -8,3 +8,4 @@ threadpoolctl==2.1.0
 torch==1.7.0
 tqdm==4.54.0
 typing-extensions==3.7.4.3
+PyYAML==5.3.1

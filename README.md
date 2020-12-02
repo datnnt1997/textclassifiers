@@ -7,7 +7,7 @@ Install dependencies:
 
 ## Run the code
 ### Train
-`python3 train.py --config configs/fasttext_config.yaml`
+`python3 run.py --config configs/fasttext_config.yaml`
 
 ### Query Well formedness result
 <table>
