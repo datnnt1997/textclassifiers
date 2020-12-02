@@ -3,8 +3,11 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 
+
 def read_data(file_path, delimiter='\t'):
     datasets = []
+    if delimiter == '\\t':
+        delimiter = '\t'
     with open(file_path, 'r', encoding='utf-8') as f:
         rows = f.readlines()
         for row in rows:

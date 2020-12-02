@@ -1,21 +1,20 @@
 import torch
 import torch.nn as nn
 
-from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+from torch.nn.utils.rnn import pack_padded_sequence
 
 
 class TextRNN(nn.Module):
-    def __init__(self, vocab_size, embed_dim, hidden_dim, bidirectional=True, num_labels=1, num_rnn_layers=1,
-                 vectors=None, pad_idx=0, dropout_prob=0.5):
+    def __init__(self, opts):
         super(TextRNN, self).__init__()
-        self.bidirectional = bidirectional
-        rnn_hidden_dim = hidden_dim // 2 if bidirectional else hidden_dim
+        self.bidirectional = opts.bidirectional
+        rnn_hidden_dim = opts.hidden_dim // 2 if opts.bidirectional else opts.hidden_dim
 
-        self.embed_layer = nn.Embedding(vocab_size, embed_dim, padding_idx=pad_idx)
-        self.lstm = nn.LSTM(embed_dim, rnn_hidden_dim, bidirectional=bidirectional, num_layers=num_rnn_layers,
-                            batch_first=True, dropout=dropout_prob)
-        self.dropout = nn.Dropout(dropout_prob)
-        self.fc_layer = nn.Linear(hidden_dim*num_rnn_layers, num_labels)
+        self.embed_layer = nn.Embedding(opts.vocab_size, opts.embed_dim, padding_idx=opts.pad_idx)
+        self.lstm = nn.LSTM(opts.embed_dim, rnn_hidden_dim, bidirectional=opts.bidirectional,
+                            num_layers=opts.num_rnn_layers, batch_first=True, dropout=opts.dropout_prob)
+        self.dropout = nn.Dropout(opts.dropout_prob)
+        self.fc_layer = nn.Linear(opts.hidden_dim * opts.num_rnn_layers, opts.num_labels)
         self.softmax = nn.LogSoftmax(dim=-1)
 
     def forward(self, input_ids, seq_len, label_ids=None):

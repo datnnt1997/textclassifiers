@@ -1,0 +1,28 @@
+## Required parameters
+model_type: "textrnn"
+saved_dir: "./output/TextRNN/"
+train_path: "./dataset/query_wellformedness/train.txt"
+test_path: "./dataset/query_wellformedness/test.txt"
+pretrained_model_dir: null
+data_format: ['text', 'label']
+delimiter: '\t'
+
+max_len: 256
+pad_token: "<pad>"
+unk_token: "<unk>"
+
+embed_dim: 300
+hidden_dim: 32
+optim: 'sgd'
+num_epoch: 100
+lr: 0.001
+momentum: 0.9
+batch_size: 128
+valid_interval: 1
+random_seed: 64
+
+num_rnn_layers: 2
+dropout_prob: 0.8
+bidirectional: true
+
+device: "cuda"
