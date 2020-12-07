@@ -12,17 +12,20 @@ pad_token: "<pad>"
 unk_token: "<unk>"
 
 embed_dim: 300
-hidden_dim: 32
+hidden_dim: 64
+num_rnn_layers: 2
+dropout_prob: 0.8
+bidirectional: true
+
 optim: 'sgd'
 num_epoch: 100
-lr: 0.001
+lr: 0.1
 momentum: 0.9
 batch_size: 128
 valid_interval: 1
 random_seed: 64
+decay_rate: 0.9
+decay_steps: -1 # if = -1 update after each epoch
 
-num_rnn_layers: 2
-dropout_prob: 0.8
-bidirectional: true
 
 device: "cuda"

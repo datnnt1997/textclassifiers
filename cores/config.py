@@ -19,6 +19,8 @@ class Config(object):
         self.hidden_dim = 10
         self.optim = 'sgd'
 
+        self.decay_rate = 0.9
+        self.decay_steps = -1  # if = -1 update after each epoch
         self.num_epoch = 100
         self.lr = 0.001
         self.momentum = 0.9
@@ -61,10 +63,32 @@ class TextCNNConfig(Config):
         self.model_type = 'textcnn'
 
 
+class RCNNConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self.dropout_prob = 0.8
+        self.fc_hidden_dim = 64
+        self.bidirectional = True
+
+        self.model_type = 'rcnn'
+
+
+class LSTMAtt(Config):
+    def __init__(self):
+        super().__init__()
+        self.num_rnn_layers = 2
+        self.dropout_prob = 0.8
+        self.bidirectional = True
+
+        self.model_type = 'lstmatt'
+
+
 CONFIG_MAP = {
     'fasttext': FastTextConfig,
     'textrnn': TextRNNConfig,
-    'textcnn': TextCNNConfig
+    'textcnn': TextCNNConfig,
+    'rcnn': RCNNConfig,
+    'lstmattn': TextRNNConfig
 }
 
 if __name__ == '__main__':

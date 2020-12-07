@@ -1,29 +1,31 @@
 ## Required parameters
-model_type: "fasttext"
-saved_dir: "./output/FastText"
+model_type: "rcnn"
+saved_dir: "./output/RCNN/"
 train_path: "./dataset/query_wellformedness/train.txt"
 test_path: "./dataset/query_wellformedness/test.txt"
-pretrained_embedding: null #"./resources/glove.6B.300d.txt"
 pretrained_model_dir: null
 data_format: ['text', 'label']
 delimiter: '\t'
-
 
 max_len: 256
 pad_token: "<pad>"
 unk_token: "<unk>"
 
 embed_dim: 300
-hidden_dim: 10
+hidden_dim: 256
+fc_hidden_dim: 256
 
 optim: 'sgd'
 num_epoch: 100
-lr: 4.0
+lr: 0.01
 momentum: 0.9
-batch_size: 128
 decay_rate: 0.9
 decay_steps: -1 # if = -1 update after each epoch
+batch_size: 128
 valid_interval: 1
 random_seed: 64
+
+dropout_prob: 0.5
+bidirectional: true
 
 device: "cuda"

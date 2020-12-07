@@ -4,12 +4,16 @@ import torch
 from .fasttext import FastText
 from .textrnn import TextRNN
 from .textcnn import TextCNN
+from .rcnn import RCNN
+from .lstm_attention import LSTMAttention
 from cores.logger import logger
 
 MODEL_MAP = {
     'fasttext': FastText,
     'textrnn': TextRNN,
-    'textcnn': TextCNN
+    'textcnn': TextCNN,
+    'rcnn': RCNN,
+    'lstmattn': LSTMAttention
 }
 
 
