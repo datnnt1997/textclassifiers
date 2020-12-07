@@ -18,9 +18,9 @@ multi_channel: True
 
 optim: 'sgd'
 num_epoch: 100
-lr: 0.001
+lr: 0.01
 momentum: 0.9
-decay_rate: 0.9
+decay_rate: 0.5
 decay_steps: -1 # if = -1 update after each epoch
 batch_size: 128
 valid_interval: 1

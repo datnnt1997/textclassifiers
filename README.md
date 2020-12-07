@@ -22,7 +22,7 @@ Install dependencies:
     <tr>
         <td>FastText [1]</td>
         <td>64.34%</td>
-        <td>64.26%</td>
+        <td>63.89%</td>
     </tr>
     <tr>
         <td>TextRNN</td>
@@ -31,8 +31,8 @@ Install dependencies:
     </tr>
     <tr>
         <td>TextCNN [2]</td>
-        <td>68.05%</td>
-        <td>67.35%</td>
+        <td>68.08%</td>
+        <td>67.72%</td>
     </tr>
     <tr>
         <td>RCNN [3]</td>
@@ -46,8 +46,8 @@ Install dependencies:
     </tr>
      <tr>
         <td>HAN</td>
-        <td>67.27%</td>
-        <td>66.70%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
 </table>
 

@@ -122,7 +122,7 @@ class TextDataset(Dataset):
             ex_label_id = self.convert_label_to_id(raw_label)
             ex_length = len(ex_input_ids)
             if ex_length < self.max_len:
-                pad_ids = [pad_id]* (self.max_len - ex_length)
+                pad_ids = [pad_id] * (self.max_len - ex_length)
                 ex_input_ids.extend(pad_ids)
             examples.append(Example(input_ids=ex_input_ids,
                                     label_id=ex_label_id,

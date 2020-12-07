@@ -13,12 +13,10 @@ max_len: 256
 pad_token: "<pad>"
 unk_token: "<unk>"
 
-embed_dim: 300
-hidden_dim: 10
-
+embed_dim: 10
 optim: 'sgd'
 num_epoch: 100
-lr: 4.0
+lr: 0.5
 momentum: 0.9
 batch_size: 128
 decay_rate: 0.9
