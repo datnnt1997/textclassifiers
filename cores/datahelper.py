@@ -17,6 +17,29 @@ def read_data(file_path, delimiter='\t'):
     return datasets
 
 
+def load_word2vec(opts):
+    with open(opts.pretrained_embedding, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        vocab_size = len(lines)
+        embed_dim = len(lines[0].split(' ')) - 1
+        vocab = []
+        vectors = []
+        if opts.pad_token is not None:
+            vocab.append(opts.pad_token)
+            vocab_size += 1
+            vectors.append(torch.zeros([embed_dim], dtype=torch.float))
+        if opts.pad_token is not None:
+            vocab.append(opts.unk_token)
+            vocab_size += 1
+            vectors.append(torch.rand([embed_dim], dtype=torch.float))
+        for line in tqdm(lines, total=vocab_size, leave=False, position=0):
+            line = line.split(' ')
+            token_vector = list(map(lambda t: float(t), filter(lambda n: n and not n.isspace(), line[1:])))
+            vocab.append(line[0])
+            vectors.append(torch.tensor(token_vector, dtype=torch.float))
+    return vocab, torch.stack(vectors)
+
+
 class Example(object):
     def __init__(self, input_ids: list, label_id: int, seq_len: int, raw_text: str = None, raw_label: str = None):
         self.input_ids = input_ids

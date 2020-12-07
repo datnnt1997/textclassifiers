@@ -2,7 +2,7 @@ import torch.nn as nn
 
 
 class FastText(nn.Module):
-    def __init__(self, opts):
+    def __init__(self, opts, vectors):
         super(FastText, self).__init__()
         self.embed_layer = nn.Embedding(opts.vocab_size, opts.embed_dim, padding_idx=opts.pad_idx)
         self.fc1_layer = nn.Linear(opts.embed_dim, opts.hidden_dim)

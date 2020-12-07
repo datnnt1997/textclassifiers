@@ -5,7 +5,7 @@ from torch.nn import functional as F
 
 
 class TextCNN(nn.Module):
-    def __init__(self, opts):
+    def __init__(self, opts, vectors):
         super(TextCNN, self).__init__()
         self.num_channel = 1
         self.embed_layer_1 = nn.Embedding(opts.vocab_size, opts.embed_dim, padding_idx=opts.pad_idx)

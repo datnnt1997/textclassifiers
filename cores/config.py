@@ -8,6 +8,7 @@ class Config(object):
         self.test_path = "./dataset/query_wellformedness/test.txt"
         self.data_format = ['text', 'label']
         self.delimiter = '\t'
+        self.pretrained_embedding = None
         self.pretrained_model_dir = None
 
         self.max_len = 256
