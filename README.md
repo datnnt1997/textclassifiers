@@ -50,8 +50,8 @@ The overall model performances on test set.
     </tr>
     <tr>
         <td>Transformer [5]</td>
-        <td>__.__%</td>
-        <td>__.__%</td>
+        <td>68.31%</td>
+        <td>67.78%</td>
     </tr>
     <tr>
         <td>BERT [6]</td>
@@ -76,7 +76,7 @@ The overall model performances on test set.
 - [x] <b>TextCNN</b> released with the paper [Convolutional neural networks for sentence classification](https://arxiv.org/abs/1408.5882) by Kim, Yoon.
 - [x] <b>RCNN</b> released with the paper [Recurrent convolutional neural networks for text classification](http://zhengyima.com/my/pdfs/Textrcnn.pdf) by Lai, Siwei, et al.
 - [x] <b>LSTM + Attention</b> released with the paper [Text classification research with attention-based recurrent neural networks](https://pdfs.semanticscholar.org/7ac1/e870f767b7d51978e5096c98699f764932ca.pdf) by Du, Changshun, and Lei Huang.
-- [ ] <b>Transformer</b> released with the paper [Attention is all you need](https://user.phil.hhu.de/~cwurm/wp-content/uploads/2020/01/7181-attention-is-all-you-need.pdf) by Vaswani, Ashish, et al.
+- [x] <b>Transformer</b> released with the paper [Attention is all you need](https://user.phil.hhu.de/~cwurm/wp-content/uploads/2020/01/7181-attention-is-all-you-need.pdf) by Vaswani, Ashish, et al.
 - [ ] <b>BERT</b> released with the paper [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) by Devlin, Jacob, et al.
 - [ ] <b>Hierarchical Attention Network</b> 
 - [ ] <b>Dynamic Memory Network</b>
