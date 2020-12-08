@@ -144,13 +144,13 @@ class Transformer(nn.Module):
                                                             opts.num_heads, opts.num_layers, opts.pad_idx, opts.max_len,
                                                             opts.dropout_prob)
         self.dropout = nn.Dropout(opts.dropout_prob)
-        self.fc_layer = nn.Linear(opts.hidden_dim, opts.num_labels)
+        self.fc_layer = nn.Linear(opts.hidden_dim * opts.max_len, opts.num_labels)
         self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, input_ids, seq_len, label_ids=None):
         hidden_state = self.transformer_encoder_layer(input_ids)
         hidden = self.dropout(hidden_state)
-        logits = self.fc_layer(hidden[:, -1, :])
+        logits = self.fc_layer(hidden.view(hidden.shape[0], -1))
         probs = self.softmax(logits)
         if label_ids is None:
             return None, probs
