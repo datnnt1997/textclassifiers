@@ -6,6 +6,8 @@ from .textrnn import TextRNN
 from .textcnn import TextCNN
 from .rcnn import RCNN
 from .lstm_attention import LSTMAttention
+from .transformer import Transformer
+
 from cores.logger import logger
 
 MODEL_MAP = {
@@ -13,7 +15,8 @@ MODEL_MAP = {
     'textrnn': TextRNN,
     'textcnn': TextCNN,
     'rcnn': RCNN,
-    'lstmattn': LSTMAttention
+    'lstmattn': LSTMAttention,
+    'transformer': Transformer
 }
 
 

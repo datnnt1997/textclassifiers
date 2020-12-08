@@ -73,7 +73,7 @@ class RCNNConfig(Config):
         self.model_type = 'rcnn'
 
 
-class LSTMAtt(Config):
+class LSTMAttConfig(Config):
     def __init__(self):
         super().__init__()
         self.num_rnn_layers = 2
@@ -83,12 +83,25 @@ class LSTMAtt(Config):
         self.model_type = 'lstmatt'
 
 
+class TransformerConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self.hidden_dim = 512
+        self.inter_dim = 2048
+        self.num_layers = 6
+        self.num_heads = 8
+        self.dropout_prob = 0.1
+
+        self.model_type = 'transformer'
+
+
 CONFIG_MAP = {
     'fasttext': FastTextConfig,
     'textrnn': TextRNNConfig,
     'textcnn': TextCNNConfig,
     'rcnn': RCNNConfig,
-    'lstmattn': TextRNNConfig
+    'lstmattn': LSTMAttConfig,
+    'transformer': TransformerConfig
 }
 
 if __name__ == '__main__':

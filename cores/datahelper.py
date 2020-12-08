@@ -172,6 +172,17 @@ class TextDataset(Dataset):
         all_labels = all_labels[indices]
         return all_input_ids, all_lens, all_labels
 
+    @staticmethod
+    def transformer_collate_fn(batch):
+        all_input_ids, all_lens, all_labels = map(torch.stack, zip(*batch))
+        return all_input_ids, all_lens, all_labels
+
+    def get_collate_fn(self):
+       if self.model_type in ['transformer', 'bert']:
+           return self.transformer_collate_fn
+       else:
+           return self.collate_fn
+
     def __len__(self):
         return len(self.examples)
 

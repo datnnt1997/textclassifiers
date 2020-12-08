@@ -1,5 +1,5 @@
 # textclassifiers
-Textclassifiers: Collection of Text Classification models for PyTorch
+Textclassifiers: Collection of Text Classification/Document Classification/Sentence Classification/Sentiment Analysis models for PyTorch
 
 Install dependencies:
 
