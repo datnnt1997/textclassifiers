@@ -1,11 +1,21 @@
 import os
 import torch
-import multiprocessing
+import json
 
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 
 from cores.logger import logger
+
+
+def save_vocab(file_path, vocab, label_set, pad_token, unk_token):
+    data = {
+        'vocab': vocab,
+        'label_set': label_set,
+        'pad_token': pad_token,
+        'unk_token': unk_token
+    }
+    json.dump(data, open(file_path, 'w', encoding='utf-8'))
 
 
 def read_data(file_path, delimiter='\t'):

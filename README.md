@@ -7,7 +7,7 @@ Install dependencies:
 
 ## Run the code
 ### Train
-`python3 run.py --config configs/fasttext_config.yaml`
+`python3 run.py --mode train --config configs/fasttext_config.yaml`
 
 ### Query Well formedness result
 The overall model performances on test set. 
