@@ -1,8 +1,10 @@
 import os
 import torch
+import multiprocessing
 
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
+
 from cores.logger import logger
 
 
@@ -140,27 +142,51 @@ class TextDataset(Dataset):
             if key in self.__dict__:
                 self.__dict__[key] = value
 
+    def create_example(self, cols, text_id, label_id, pad_id):
+        raw_text = cols[text_id].strip()
+        raw_label = cols[label_id].strip()
+
+        ex_text = self.preprocess(raw_text)
+        ex_input_ids = self.convert_tokens_to_ids(ex_text)
+        ex_label_id = self.convert_label_to_id(raw_label)
+        ex_length = len(ex_input_ids)
+        if ex_length < self.max_len:
+            pad_ids = [pad_id] * (self.max_len - ex_length)
+            ex_input_ids.extend(pad_ids)
+        elif ex_length > self.max_len:
+            ex_input_ids = ex_input_ids[:self.max_len]
+            ex_length = self.max_len
+
+        return Example(input_ids=ex_input_ids,
+                       label_id=ex_label_id,
+                       seq_len=ex_length,
+                       raw_text=raw_text,
+                       raw_label=raw_label)
+
     def create_examples(self, dataset):
         examples = []
         pad_id = self.vocab.index(self.pad_token)
         text_id = self.data_format.index('text')
         label_id = self.data_format.index('label')
-        for cols in tqdm(dataset):
-            raw_text = cols[text_id].strip()
-            raw_label = cols[label_id].strip()
-
-            ex_text = self.preprocess(raw_text)
-            ex_input_ids = self.convert_tokens_to_ids(ex_text)
-            ex_label_id = self.convert_label_to_id(raw_label)
-            ex_length = len(ex_input_ids)
-            if ex_length < self.max_len:
-                pad_ids = [pad_id] * (self.max_len - ex_length)
-                ex_input_ids.extend(pad_ids)
-            examples.append(Example(input_ids=ex_input_ids,
-                                    label_id=ex_label_id,
-                                    seq_len=ex_length,
-                                    raw_text=raw_text,
-                                    raw_label=raw_label))
+        with multiprocessing.pool.ThreadPool(processes=4) as pool:
+            params = list(map(lambda cols: (cols, text_id, label_id, pad_id), dataset))
+            examples = tqdm(pool.starmap(self.create_example, params))
+        # for cols in tqdm(dataset):
+        #     raw_text = cols[text_id].strip()
+        #     raw_label = cols[label_id].strip()
+        #
+        #     ex_text = self.preprocess(raw_text)
+        #     ex_input_ids = self.convert_tokens_to_ids(ex_text)
+        #     ex_label_id = self.convert_label_to_id(raw_label)
+        #     ex_length = len(ex_input_ids)
+        #     if ex_length < self.max_len:
+        #         pad_ids = [pad_id] * (self.max_len - ex_length)
+        #         ex_input_ids.extend(pad_ids)
+        #     examples.append(Example(input_ids=ex_input_ids,
+        #                             label_id=ex_label_id,
+        #                             seq_len=ex_length,
+        #                             raw_text=raw_text,
+        #                             raw_label=raw_label))
 
         return examples
 

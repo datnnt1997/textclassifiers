@@ -59,7 +59,7 @@ The overall model performances on test set.
         <td>__.__%</td>
     </tr>
      <tr>
-        <td>HAN</td>
+        <td>HAN [7]</td>
         <td>__.__%</td>
         <td>__.__%</td>
     </tr>
@@ -78,7 +78,7 @@ The overall model performances on test set.
 - [x] <b>LSTM + Attention</b> released with the paper [Text classification research with attention-based recurrent neural networks](https://pdfs.semanticscholar.org/7ac1/e870f767b7d51978e5096c98699f764932ca.pdf) by Du, Changshun, and Lei Huang.
 - [x] <b>Transformer</b> released with the paper [Attention is all you need](https://user.phil.hhu.de/~cwurm/wp-content/uploads/2020/01/7181-attention-is-all-you-need.pdf) by Vaswani, Ashish, et al.
 - [ ] <b>BERT</b> released with the paper [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) by Devlin, Jacob, et al.
-- [ ] <b>Hierarchical Attention Network</b> 
+- [ ] <b>Hierarchical Attention Network</b> released with the paper [Hierarchical Attention Networks for Document Classification](https://www.aclweb.org/anthology/N16-1174.pdf) by Yang, Zichao, et al.
 - [ ] <b>Dynamic Memory Network</b>
 
 ## References
@@ -93,3 +93,5 @@ The overall model performances on test set.
 [5] Vaswani, Ashish, et al. "Attention is all you need." Proceedings of the 31st International Conference on Neural Information Processing Systems. Curran Associates Inc., 2017.
 
 [6] Devlin, Jacob, et al. "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding." Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers). 2019.
+
+[7] Yang, Zichao, et al. "Hierarchical attention networks for document classification." Proceedings of the 2016 conference of the North American chapter of the association for computational linguistics: human language technologies. 2016.
