@@ -10,6 +10,10 @@ Install dependencies:
 `python3 run.py --config configs/fasttext_config.yaml`
 
 ### Query Well formedness result
+The overall model performances on test set. 
+
+**Note: The test's model parameter configuration is saved in `./examples/ag_news`
+
 <table>
     <tr>
         <th rowspan="2">Model</th>
@@ -21,8 +25,8 @@ Install dependencies:
     </tr>
     <tr>
         <td>FastText [1]</td>
-        <td>64.34%</td>
-        <td>63.89%</td>
+        <td>66.33%</td>
+        <td>66.20%</td>
     </tr>
     <tr>
         <td>TextRNN</td>
@@ -44,8 +48,23 @@ Install dependencies:
         <td>67.27%</td>
         <td>66.70%</td>
     </tr>
+    <tr>
+        <td>Transformer [5]</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
+    </tr>
+    <tr>
+        <td>BERT [6]</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
+    </tr>
      <tr>
         <td>HAN</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
+    </tr>
+    <tr>
+        <td>DNN</td>
         <td>__.__%</td>
         <td>__.__%</td>
     </tr>
@@ -57,9 +76,9 @@ Install dependencies:
 - [x] <b>TextCNN</b> released with the paper [Convolutional neural networks for sentence classification](https://arxiv.org/abs/1408.5882) by Kim, Yoon.
 - [x] <b>RCNN</b> released with the paper [Recurrent convolutional neural networks for text classification](http://zhengyima.com/my/pdfs/Textrcnn.pdf) by Lai, Siwei, et al.
 - [x] <b>LSTM + Attention</b> released with the paper [Text classification research with attention-based recurrent neural networks](https://pdfs.semanticscholar.org/7ac1/e870f767b7d51978e5096c98699f764932ca.pdf) by Du, Changshun, and Lei Huang.
-- [ ] <b>Transformer</b>
-- [ ] <b>BERT</b>
-- [ ] <b>Hierarchical Attention Network</b>
+- [ ] <b>Transformer</b> released with the paper [Attention is all you need](https://user.phil.hhu.de/~cwurm/wp-content/uploads/2020/01/7181-attention-is-all-you-need.pdf) by Vaswani, Ashish, et al.
+- [ ] <b>BERT</b> released with the paper [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805.pdf) by Devlin, Jacob, et al.
+- [ ] <b>Hierarchical Attention Network</b> 
 - [ ] <b>Dynamic Memory Network</b>
 
 ## References
@@ -70,3 +89,7 @@ Install dependencies:
 [3] Lai, Siwei, et al. "Recurrent convolutional neural networks for text classification." In Proc. Conference of the Association for the Advancement of Artificial Intelligence (AAAI). 2015.
 
 [4] Du, Changshun, and Lei Huang. "Text classification research with attention-based recurrent neural networks." International Journal of Computers Communications & Control 13.1 (2018): 50-61.
+
+[5] Vaswani, Ashish, et al. "Attention is all you need." Proceedings of the 31st International Conference on Neural Information Processing Systems. Curran Associates Inc., 2017.
+
+[6] Devlin, Jacob, et al. "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding." Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers). 2019.

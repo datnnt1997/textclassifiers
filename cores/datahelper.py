@@ -1,7 +1,9 @@
+import os
 import torch
 
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
+from cores.logger import logger
 
 
 def read_data(file_path, delimiter='\t'):
@@ -61,9 +63,10 @@ class Example(object):
 
 
 class TextDataset(Dataset):
-    def __init__(self, file_path, data_format: list = ['text', 'label'],
-                 delimiter='\t', vocab=None, label_set=None, max_len=256,
-                 pad_token="<pad>",  unk_token="<unk>"):
+    def __init__(self, file_path, model_type: str, data_format: list = ['text', 'label'], delimiter='\t', vocab=None,
+                 label_set=None, max_len=256, pad_token="<pad>",  unk_token="<unk>"):
+        self.file_path = file_path
+        self.model_type = model_type
         self.pad_token = pad_token
         self.unk_token = unk_token
         self.max_len = max_len
@@ -71,7 +74,16 @@ class TextDataset(Dataset):
 
         self.init_vocal, self.vocab = (True, [self.pad_token, self.unk_token]) if vocab is None else (False, vocab)
         self.init_label, self.label_set = (True, []) if label_set is None else (False, label_set)
-        self.examples = self.create_examples(read_data(file_path, delimiter))
+
+        dataset_name = os.path.basename(self.file_path).split('.')[0].strip()
+        cached_dir = os.path.dirname(self.file_path)
+        self.cached_file = cached_dir + f'/cached_file_{self.model_type}_{self.max_len}_{dataset_name}'
+        if os.path.exists(self.cached_file):
+            self.examples = []
+            self.load_cached_file()
+        else:
+            self.examples = self.create_examples(read_data(file_path, delimiter))
+            self.cache_dataset()
 
     @property
     def pad_id(self):
@@ -108,6 +120,26 @@ class TextDataset(Dataset):
     def preprocess(self, text):
         return text
 
+    def cache_dataset(self):
+        data = {
+            'vocab': self.vocab,
+            'label_set': self.label_set,
+            'pad_token': self.pad_token,
+            'unk_token': self.unk_token,
+            'max_len': self.max_len,
+            'data_format': self.data_format,
+            'examples': self.examples
+        }
+        logger.info("\tSaving Dataset into cached file %s", self.cached_file)
+        torch.save(data, self.cached_file)
+
+    def load_cached_file(self):
+        logger.info("\tLoad Dataset from cached file %s", self.cached_file)
+        data = torch.load(self.cached_file)
+        for key, value in data.items():
+            if key in self.__dict__:
+                self.__dict__[key] = value
+
     def create_examples(self, dataset):
         examples = []
         pad_id = self.vocab.index(self.pad_token)
@@ -129,6 +161,7 @@ class TextDataset(Dataset):
                                     seq_len=ex_length,
                                     raw_text=raw_text,
                                     raw_label=raw_label))
+
         return examples
 
     @staticmethod

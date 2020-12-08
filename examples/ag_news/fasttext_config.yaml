@@ -15,8 +15,8 @@ unk_token: "<unk>"
 
 embed_dim: 10
 optim: 'sgd'
-num_epoch: 100
-lr: 0.5
+num_epoch: 6
+lr: 4.0
 momentum: 0.9
 batch_size: 128
 decay_rate: 0.9
