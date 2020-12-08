@@ -9,17 +9,23 @@ Install dependencies:
 ### Train
 `python3 run.py --mode train --config configs/fasttext_config.yaml`
 
-### Query Well formedness result
+### Results
 The overall model performances on test set. 
 
-**Note: The test's model parameter configuration is saved in `./examples/ag_news`
+**Note: The test's model parameter configuration is saved in `./examples/`
 
 <table>
     <tr>
-        <th rowspan="2">Model</th>
-        <th align="center" colspan="2">Score</th>
+        <th rowspan="3">Model</th>
+        <th align="center" colspan="4">Score</th>
     </tr>
     <tr>
+        <th align="center" colspan="2">Query Well formedness</th>
+        <th align="center" colspan="2">AG News</th>
+    </tr>
+    <tr>
+        <th>Accuracy</th>
+        <th>F1 Score </th>
         <th>Accuracy</th>
         <th>F1 Score </th>
     </tr>
@@ -27,34 +33,48 @@ The overall model performances on test set.
         <td>FastText [1]</td>
         <td>66.33%</td>
         <td>66.20%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>TextRNN</td>
         <td>69.35%</td>
         <td>68.98%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>TextCNN [2]</td>
         <td>68.08%</td>
         <td>67.72%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>RCNN [3]</td>
         <td>68.00%</td>
         <td>67.72%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>LSTM + Attention [4]</td>
         <td>67.27%</td>
         <td>66.70%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>Transformer [5]</td>
         <td>68.31%</td>
         <td>67.78%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>BERT [6]</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
         <td>__.__%</td>
         <td>__.__%</td>
     </tr>
@@ -62,13 +82,18 @@ The overall model performances on test set.
         <td>HAN [7]</td>
         <td>__.__%</td>
         <td>__.__%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
     <tr>
         <td>DNN</td>
         <td>__.__%</td>
         <td>__.__%</td>
+        <td>__.__%</td>
+        <td>__.__%</td>
     </tr>
 </table>
+
 
 ## Model Releases
 - [x] <b>FastText</b> released with the paper [Bag of tricks for efficient text classification](https://arxiv.org/abs/1607.01759) by Joulin, Armand, et al.
